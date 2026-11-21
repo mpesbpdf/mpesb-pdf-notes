@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -5,89 +6,191 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MPESB PDF Notes | Exam Study Store</title>
 <style>
-:root{--navy:#102b50;--blue:#1d5fa7;--bg:#f4f7fb;--ink:#172337;--muted:#64748b;--line:#e2e8f0}
-*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--ink)}
-header{background:var(--navy);color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.brand{font-weight:800;font-size:20px}.brand small{display:block;font-size:11px;font-weight:400;color:#d6e4f5;margin-top:4px}
-nav{display:flex;gap:16px;align-items:center}nav a{color:white;text-decoration:none;font-size:14px}
-.hero{padding:46px 5%;background:linear-gradient(120deg,#102b50,#2369ad);color:white}
-.hero h1{font-size:clamp(26px,5vw,42px);margin:0 0 12px}.hero p{max-width:650px;color:#e3efff;line-height:1.6}
-.search{display:flex;max-width:550px;margin-top:20px}.search input{flex:1;min-width:0;padding:13px;border:0;border-radius:8px 0 0 8px;font-size:15px}.search button{border:0;background:#f5b942;padding:0 18px;border-radius:0 8px 8px 0;font-weight:bold}
-.wrap{max-width:1120px;margin:auto;padding:28px 5%}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}.section-head h2{margin:0 0 6px}.muted{color:var(--muted);font-size:14px}
-.categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:20px 0 30px}
-.cat{background:white;border:1px solid var(--line);border-radius:12px;padding:17px;text-align:center;font-weight:bold}.cat span{display:block;font-size:25px;margin-bottom:8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:18px}
-.card{background:white;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 3px 12px #0f172a08}
-.tag{display:inline-block;background:#eaf2fc;color:#1d5fa7;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:bold}
-.card h3{font-size:17px;margin:12px 0 7px}.card p{font-size:13px;color:var(--muted);line-height:1.5;min-height:38px}
-.price-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}.price{font-weight:800;font-size:21px;color:#13734b}
-button,.btn{cursor:pointer;border:0;border-radius:8px;padding:10px 13px;background:var(--blue);color:white;font-weight:bold;text-decoration:none;display:inline-block}
-.secondary{background:#eaf2fc;color:#164d86}.admin{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:28px}
-.admin input,.admin select{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;margin:6px 0 12px;font-size:14px}
-.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
-footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
-.notice{background:#fff7df;border:1px solid #f4d58a;color:#74520b;padding:12px;border-radius:9px;font-size:13px;line-height:1.5;margin-top:16px}
-.empty{padding:25px;text-align:center;color:var(--muted);background:white;border:1px dashed var(--line);border-radius:12px}
-@media(max-width:600px){header{padding:14px 5%}nav{width:100%;justify-content:space-between}.hero{padding:34px 5%}}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172337}
+header{background:#102b50;color:white;padding:18px;text-align:center}
+header h2{margin:0}
+.hero{background:linear-gradient(120deg,#102b50,#2369ad);color:white;padding:40px 18px;text-align:center}
+.hero h1{margin:0 0 10px}
+.search{width:90%;max-width:500px;padding:13px;border:0;border-radius:8px;margin-top:15px}
+.wrap{max-width:1100px;margin:auto;padding:20px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.filters button,.admin button{padding:10px 15px;border:0;border-radius:7px;background:#1d5fa7;color:white;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.card{background:white;border:1px solid #ddd;border-radius:12px;padding:18px}
+.tag{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.free{background:#d9f7e8;color:#087443}
+.paid{background:#fff0d5;color:#985500}
+.price{font-size:22px;font-weight:bold;margin:12px 0}
+.card button{width:100%;padding:11px;border:0;border-radius:7px;background:#1d5fa7;color:white;cursor:pointer}
+.admin{background:white;padding:20px;border-radius:12px;margin-top:30px}
+.admin input,.admin select{width:100%;padding:11px;margin:7px 0 13px;border:1px solid #ccc;border-radius:7px}
+footer{text-align:center;padding:25px;color:#666}
 </style>
 </head>
 <body>
+
 <header>
-  <div class="brand">🎓 MPESB PDF NOTES<small>Government Exam Study Store</small></div>
-  <nav><a href="#home">Home</a><a href="#pdfs">PDF Store</a><a href="#admin">Admin</a></nav>
+<h2>MPESB PDF NOTES</h2>
+<p>आपकी परीक्षा की तैयारी, अब आसान</p>
 </header>
-<section class="hero" id="home">
-  <h1>सरकारी परीक्षा की तैयारी अब आसान!</h1>
-  <p>MPESB, Banking, SSC और Computer परीक्षाओं के लिए Notes, PYQ और Practice Sets एक ही जगह।</p>
-  <div class="search"><input id="search" placeholder="अपनी परीक्षा या PDF खोजें..." oninput="render()"><button onclick="document.getElementById('pdfs').scrollIntoView()">Search</button></div>
+
+<section class="hero">
+<h1>Exam Study PDF Store</h1>
+<p>MPESB | Banking | Computer | SSC</p>
+<input class="search" id="search" placeholder="PDF खोजें..." oninput="render()">
 </section>
+
 <main class="wrap">
-  <div class="section-head"><div><h2>Popular Categories</h2><div class="muted">अपनी परीक्षा के अनुसार सामग्री चुनें</div></div></div>
-  <div class="categories">
-    <div class="cat"><span>📘</span>MPESB</div><div class="cat"><span>🧮</span>Banking</div>
-    <div class="cat"><span>💻</span>Computer</div><div class="cat"><span>📝</span>SSC & Other</div>
-  </div>
-  <section id="pdfs">
-    <div class="section-head"><div><h2>Available PDF Notes</h2><div class="muted">PDF खरीदने से पहले विवरण देखें</div></div></div>
-    <div id="productGrid" class="grid"></div>
-  </section>
-  <div class="notice"><b>महत्वपूर्ण:</b> यह शुरुआती वेबसाइट डेमो है। वास्तविक ऑनलाइन भुगतान, सुरक्षित ऑटो-डाउनलोड और सभी ग्राहकों के लिए PDF उपलब्ध कराने हेतु इसे होस्टिंग, सर्वर/डेटाबेस और पेमेंट गेटवे से जोड़ना होगा। अभी Buy Now बटन केवल डेमो संदेश दिखाता है।</div>
-  <section class="admin" id="admin">
-    <h2>🔐 Admin – PDF जोड़ें</h2>
-    <p class="muted">इस डेमो में जोड़े गए PDF केवल इसी ब्राउज़र में दिखाई देंगे। सार्वजनिक वेबसाइट पर स्थायी अपलोड के लिए सर्वर स्टोरेज चाहिए।</p>
-    <div class="formgrid">
-      <div><label>PDF का नाम</label><input id="pname" placeholder="जैसे MPESB Group 2 Notes"></div>
-      <div><label>Category</label><select id="pcat"><option>MPESB</option><option>Banking</option><option>Computer</option><option>SSC & Other</option></select></div>
-      <div><label>कीमत (₹)</label><input id="pprice" type="number" min="0" placeholder="99"></div>
-      <div><label>PDF फ़ाइल</label><input id="pfile" type="file" accept="application/pdf"></div>
-    </div>
-    <button onclick="addProduct()">+ PDF जोड़ें</button>
-  </section>
+<h2>PDF Categories</h2>
+<div class="filters">
+<button onclick="setCategory('All')">All</button>
+<button onclick="setCategory('MPESB')">MPESB</button>
+<button onclick="setCategory('Banking')">Banking</button>
+<button onclick="setCategory('Computer')">Computer</button>
+<button onclick="setCategory('SSC')">SSC</button>
+</div>
+
+<h2>Available PDF Notes</h2>
+<div class="grid" id="productGrid"></div>
+
+<section class="admin">
+<h2>Admin - Add PDF (Demo)</h2>
+<p>यह डेमो सुविधा केवल इसी ब्राउज़र के खुले पेज में काम करेगी।</p>
+
+<form id="uploadForm">
+<label>PDF का नाम</label>
+<input id="pname" required placeholder="PDF का नाम लिखें">
+
+<label>Category</label>
+<select id="pcat">
+<option>MPESB</option>
+<option>Banking</option>
+<option>Computer</option>
+<option>SSC</option>
+<option>Other</option>
+</select>
+
+<label>PDF का प्रकार</label>
+<select id="ptype">
+<option value="FREE">FREE</option>
+<option value="PAID">PAID</option>
+</select>
+
+<label>कीमत (₹)</label>
+<input id="pprice" type="number" min="0" value="0">
+
+<label>PDF File</label>
+<input id="pfile" type="file" accept="application/pdf" required>
+
+<button type="submit">Add PDF</button>
+</form>
+</section>
 </main>
-<footer>© 2026 MPESB PDF Notes · सभी अधिकार सुरक्षित</footer>
+
+<footer>
+<p>© 2026 MPESB PDF Notes | All Rights Reserved</p>
+</footer>
+
 <script>
-let products = [
- {name:"MPESB Group 2 & 3 – Demo Notes",cat:"MPESB",price:99,file:null},
- {name:"Computer Fundamentals – MCQ Set",cat:"Computer",price:49,file:null},
- {name:"Banking Maths Practice Set",cat:"Banking",price:79,file:null}
+let products=[
+{name:"MPESB Maths Practice Set",cat:"MPESB",type:"FREE",price:0,file:null},
+{name:"Computer Fundamentals MCQ Set",cat:"Computer",type:"PAID",price:49,file:null},
+{name:"Banking Maths Practice Set",cat:"Banking",type:"PAID",price:79,file:null},
+{name:"SSC Reasoning Notes",cat:"SSC",type:"FREE",price:0,file:null}
 ];
+
+let selectedCategory="All";
+
+function setCategory(category){
+selectedCategory=category;
+render();
+}
+
 function render(){
- const q=(document.getElementById('search').value||'').toLowerCase();
- const list=products.filter(p=>(p.name+' '+p.cat).toLowerCase().includes(q));
- const grid=document.getElementById('productGrid');
- if(!list.length){grid.innerHTML='<div class="empty">कोई PDF नहीं मिली।</div>';return;}
- grid.innerHTML=list.map((p,i)=>`<article class="card"><span class="tag">${esc(p.cat)}</span><h3>${esc(p.name)}</h3><p>Study notes और practice material. खरीदने से पहले PDF का विवरण जाँचें।</p><div class="price-row"><span class="price">₹${Number(p.price)||0}</span><button onclick="buy(${products.indexOf(p)})">Buy Now</button></div></article>`).join('');
+let q=document.getElementById("search").value.toLowerCase();
+
+let list=products.filter(p=>
+(selectedCategory==="All"||p.cat===selectedCategory)&&
+p.name.toLowerCase().includes(q)
+);
+
+let grid=document.getElementById("productGrid");
+grid.innerHTML="";
+
+if(!list.length){
+grid.innerHTML="<p>कोई PDF नहीं मिली।</p>";
+return;
 }
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function addProduct(){
- const name=document.getElementById('pname').value.trim(),cat=document.getElementById('pcat').value,price=document.getElementById('pprice').value,file=document.getElementById('pfile').files[0];
- if(!name||price===''||Number(price)<0){alert('PDF का नाम और सही कीमत भरें।');return;}
- if(!file||file.type!=='application/pdf'){alert('कृपया PDF फ़ाइल चुनें।');return;}
- products.push({name,cat,price:Number(price),file});
- document.getElementById('pname').value='';document.getElementById('pprice').value='';document.getElementById('pfile').value='';
- render();alert('PDF इस डेमो में जोड़ दी गई है। यह अभी केवल इसी ब्राउज़र में उपलब्ध है।');
+
+list.forEach(p=>{
+let card=document.createElement("div");
+card.className="card";
+
+let title=document.createElement("h3");
+title.textContent=p.name;
+
+let category=document.createElement("p");
+category.textContent=p.cat;
+
+let tag=document.createElement("span");
+tag.className="tag "+(p.type==="FREE"?"free":"paid");
+tag.textContent=p.type;
+
+let price=document.createElement("div");
+price.className="price";
+price.textContent=p.type==="FREE"?"FREE":"₹"+p.price;
+
+let button=document.createElement("button");
+button.textContent=p.type==="FREE"?"Download PDF":"Buy Now";
+
+button.onclick=()=>{
+if(p.type==="FREE"){
+if(p.file){
+let url=URL.createObjectURL(p.file);
+let a=document.createElement("a");
+a.href=url;
+a.download=p.name+".pdf";
+a.click();
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+}else{
+alert("इस PDF की फाइल अभी अपलोड नहीं की गई है।");
 }
-function buy(i){alert('यह डेमो Buy Now बटन है। असली बिक्री के लिए Razorpay/अन्य payment gateway और secure download backend जोड़ना होगा।');}
+}else{
+alert("यह केवल Demo Buy Now बटन है। असली भुगतान और सुरक्षित डाउनलोड अभी जुड़े नहीं हैं।");
+}
+};
+
+card.append(title,category,tag,price,button);
+grid.appendChild(card);
+});
+}
+
+document.getElementById("uploadForm").addEventListener("submit",function(e){
+e.preventDefault();
+
+let file=document.getElementById("pfile").files[0];
+let name=document.getElementById("pname").value.trim();
+let cat=document.getElementById("pcat").value;
+let type=document.getElementById("ptype").value;
+let price=Number(document.getElementById("pprice").value);
+
+if(!file||file.type!=="application/pdf"){
+alert("कृपया सही PDF फाइल चुनें।");
+return;
+}
+
+if(type==="PAID"&&price<=0){
+alert("Paid PDF की कीमत डालें।");
+return;
+}
+
+products.push({name,cat,type,price,file});
+render();
+this.reset();
+alert("PDF Demo में जोड़ दी गई है।");
+});
+
 render();
 </script>
 </body>
