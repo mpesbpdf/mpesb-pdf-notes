@@ -5,29 +5,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MPESB PDF Notes | Exam Study Store</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172337}
 header{background:#102b50;color:white;padding:18px;text-align:center}
-header h2{margin:0}
 .hero{background:linear-gradient(120deg,#102b50,#2369ad);color:white;padding:40px 18px;text-align:center}
-.hero h1{margin:0 0 10px}
 .search{width:90%;max-width:500px;padding:13px;border:0;border-radius:8px;margin-top:15px}
 .wrap{max-width:1100px;margin:auto;padding:20px}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-.filters button,.admin button{padding:10px 15px;border:0;border-radius:7px;background:#1d5fa7;color:white;cursor:pointer}
+button{padding:11px 15px;border:0;border-radius:7px;background:#1d5fa7;color:white;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-.card{background:white;border:1px solid #ddd;border-radius:12px;padding:18px}
+.card,.admin{background:white;border:1px solid #ddd;border-radius:12px;padding:18px}
 .tag{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
 .free{background:#d9f7e8;color:#087443}
 .paid{background:#fff0d5;color:#985500}
 .price{font-size:22px;font-weight:bold;margin:12px 0}
-.card button{width:100%;padding:11px;border:0;border-radius:7px;background:#1d5fa7;color:white;cursor:pointer}
-.admin{background:white;padding:20px;border-radius:12px;margin-top:30px}
+.admin{margin-top:30px}
 .admin input,.admin select{width:100%;padding:11px;margin:7px 0 13px;border:1px solid #ccc;border-radius:7px}
+.hidden{display:none}
+.message{padding:12px;margin:12px 0;background:#e8f1ff;border-radius:7px}
 footer{text-align:center;padding:25px;color:#666}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -38,11 +40,13 @@ footer{text-align:center;padding:25px;color:#666}
 <section class="hero">
 <h1>Exam Study PDF Store</h1>
 <p>MPESB | Banking | Computer | SSC</p>
-<input class="search" id="search" placeholder="PDF खोजें..." oninput="render()">
+<input class="search" id="search" placeholder="PDF खोजें...">
 </section>
 
 <main class="wrap">
+
 <h2>PDF Categories</h2>
+
 <div class="filters">
 <button onclick="setCategory('All')">All</button>
 <button onclick="setCategory('MPESB')">MPESB</button>
@@ -52,15 +56,40 @@ footer{text-align:center;padding:25px;color:#666}
 </div>
 
 <h2>Available PDF Notes</h2>
+<div id="status" class="message">PDF लोड हो रही हैं...</div>
 <div class="grid" id="productGrid"></div>
 
 <section class="admin">
-<h2>Admin - Add PDF (Demo)</h2>
-<p>यह डेमो सुविधा केवल इसी ब्राउज़र के खुले पेज में काम करेगी।</p>
+
+<h2>Admin Panel</h2>
+
+<div id="loginBox">
+<p>केवल Admin Login कर सकता है।</p>
+
+<form id="loginForm">
+<label>Email</label>
+<input id="email" type="email" required placeholder="Admin Email">
+
+<label>Password</label>
+<input id="password" type="password" required placeholder="Admin Password">
+
+<button type="submit">Admin Login</button>
+</form>
+</div>
+
+<div id="adminPanel" class="hidden">
+
+<p id="adminStatus">Admin Login सफल</p>
+<button id="logoutBtn" type="button">Logout</button>
+
+<hr>
+
+<h3>Upload PDF</h3>
 
 <form id="uploadForm">
+
 <label>PDF का नाम</label>
-<input id="pname" required placeholder="PDF का नाम लिखें">
+<input id="pname" required placeholder="PDF का नाम">
 
 <label>Category</label>
 <select id="pcat">
@@ -83,8 +112,13 @@ footer{text-align:center;padding:25px;color:#666}
 <label>PDF File</label>
 <input id="pfile" type="file" accept="application/pdf" required>
 
-<button type="submit">Add PDF</button>
+<button id="uploadBtn" type="submit">Upload PDF</button>
+
 </form>
+</div>
+
+<div id="adminMessage"></div>
+
 </section>
 </main>
 
@@ -92,106 +126,272 @@ footer{text-align:center;padding:25px;color:#666}
 <p>© 2026 MPESB PDF Notes | All Rights Reserved</p>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+
 <script>
-let products=[
-{name:"MPESB Maths Practice Set",cat:"MPESB",type:"FREE",price:0,file:null},
-{name:"Computer Fundamentals MCQ Set",cat:"Computer",type:"PAID",price:49,file:null},
-{name:"Banking Maths Practice Set",cat:"Banking",type:"PAID",price:79,file:null},
-{name:"SSC Reasoning Notes",cat:"SSC",type:"FREE",price:0,file:null}
-];
 
-let selectedCategory="All";
-
-function setCategory(category){
-selectedCategory=category;
-render();
-}
-
-function render(){
-let q=document.getElementById("search").value.toLowerCase();
-
-let list=products.filter(p=>
-(selectedCategory==="All"||p.cat===selectedCategory)&&
-p.name.toLowerCase().includes(q)
-);
-
-let grid=document.getElementById("productGrid");
-grid.innerHTML="";
-
-if(!list.length){
-grid.innerHTML="<p>कोई PDF नहीं मिली।</p>";
-return;
-}
-
-list.forEach(p=>{
-let card=document.createElement("div");
-card.className="card";
-
-let title=document.createElement("h3");
-title.textContent=p.name;
-
-let category=document.createElement("p");
-category.textContent=p.cat;
-
-let tag=document.createElement("span");
-tag.className="tag "+(p.type==="FREE"?"free":"paid");
-tag.textContent=p.type;
-
-let price=document.createElement("div");
-price.className="price";
-price.textContent=p.type==="FREE"?"FREE":"₹"+p.price;
-
-let button=document.createElement("button");
-button.textContent=p.type==="FREE"?"Download PDF":"Buy Now";
-
-button.onclick=()=>{
-if(p.type==="FREE"){
-if(p.file){
-let url=URL.createObjectURL(p.file);
-let a=document.createElement("a");
-a.href=url;
-a.download=p.name+".pdf";
-a.click();
-setTimeout(()=>URL.revokeObjectURL(url),1000);
-}else{
-alert("इस PDF की फाइल अभी अपलोड नहीं की गई है।");
-}
-}else{
-alert("यह केवल Demo Buy Now बटन है। असली भुगतान और सुरक्षित डाउनलोड अभी जुड़े नहीं हैं।");
-}
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAEKVl95cbwsxDF27zCD3E4JrhgYwnXdIk",
+  authDomain: "mpesb-pdf-notes.firebaseapp.com",
+  projectId: "mpesb-pdf-notes",
+  storageBucket: "mpesb-pdf-notes.firebasestorage.app",
+  messagingSenderId: "1047937950473",
+  appId: "1:1047937950473:web:6b89fd2cabe56e5665e9d8",
+  measurementId: "G-4WDMTHQ8EM"
 };
 
-card.append(title,category,tag,price,button);
-grid.appendChild(card);
+// Admin UID
+const ADMIN_UID = "bVjyZSj1gAeyvpc2oPG0Tr4hDOp2";
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+let products = [];
+let selectedCategory = "All";
+let isAdmin = false;
+
+const grid = document.getElementById("productGrid");
+const statusBox = document.getElementById("status");
+const adminMessage = document.getElementById("adminMessage");
+
+function showMessage(message){
+  adminMessage.textContent = message;
+}
+
+function setCategory(category){
+  selectedCategory = category;
+  render();
+}
+
+document.getElementById("search").addEventListener("input",render);
+
+// Firebase से PDF जानकारी प्राप्त करना
+db.collection("pdfs").onSnapshot(snapshot => {
+
+  products = snapshot.docs.map(doc => ({
+    id:doc.id,
+    ...doc.data()
+  }));
+
+  products.sort((a,b)=>{
+    const at = a.createdAt?.toMillis?.() || 0;
+    const bt = b.createdAt?.toMillis?.() || 0;
+    return bt-at;
+  });
+
+  statusBox.textContent = products.length
+    ? "PDF उपलब्ध हैं।"
+    : "अभी कोई PDF अपलोड नहीं की गई है।";
+
+  render();
+
+},error=>{
+  statusBox.textContent = "PDF लोड नहीं हो सकीं। Firebase Rules जाँचें।";
 });
+
+// PDF Cards
+function render(){
+
+  const q = document.getElementById("search").value.toLowerCase();
+
+  const list = products.filter(p =>
+    (selectedCategory==="All" || p.cat===selectedCategory) &&
+    (p.name || "").toLowerCase().includes(q)
+  );
+
+  grid.innerHTML = "";
+
+  if(!list.length){
+    grid.textContent = "कोई PDF नहीं मिली।";
+    return;
+  }
+
+  list.forEach(p=>{
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const title = document.createElement("h3");
+    title.textContent = p.name || "PDF Notes";
+
+    const category = document.createElement("p");
+    category.textContent = p.cat || "Other";
+
+    const tag = document.createElement("span");
+    tag.className = "tag " + (p.type==="FREE"?"free":"paid");
+    tag.textContent = p.type || "FREE";
+
+    const price = document.createElement("div");
+    price.className = "price";
+    price.textContent = p.type==="FREE" ? "FREE" : "₹"+p.price;
+
+    const button = document.createElement("button");
+
+    if(p.type==="FREE"){
+      button.textContent = "Download PDF";
+      button.onclick = ()=>downloadPDF(p);
+    }
+    else if(isAdmin){
+      button.textContent = "Admin Download";
+      button.onclick = ()=>downloadPDF(p);
+    }
+    else{
+      button.textContent = "PAID PDF - Locked";
+      button.disabled = true;
+    }
+
+    card.append(title,category,tag,price,button);
+    grid.appendChild(card);
+  });
 }
 
-document.getElementById("uploadForm").addEventListener("submit",function(e){
-e.preventDefault();
+// PDF Download
+async function downloadPDF(p){
 
-let file=document.getElementById("pfile").files[0];
-let name=document.getElementById("pname").value.trim();
-let cat=document.getElementById("pcat").value;
-let type=document.getElementById("ptype").value;
-let price=Number(document.getElementById("pprice").value);
+  if(!p.storagePath){
+    alert("PDF फाइल का पता उपलब्ध नहीं है।");
+    return;
+  }
 
-if(!file||file.type!=="application/pdf"){
-alert("कृपया सही PDF फाइल चुनें।");
-return;
+  if(p.type==="PAID" && !isAdmin){
+    alert("यह Paid PDF है। भुगतान सत्यापन के बाद ही डाउनलोड उपलब्ध होगा।");
+    return;
+  }
+
+  try{
+    const url = await storage.ref(p.storagePath).getDownloadURL();
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.download = (p.name || "notes") + ".pdf";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+  }catch(error){
+    alert("डाउनलोड नहीं हो सका। Firebase Storage Rules जाँचें।");
+    console.error(error);
+  }
 }
 
-if(type==="PAID"&&price<=0){
-alert("Paid PDF की कीमत डालें।");
-return;
-}
+// Admin Login
+document.getElementById("loginForm").addEventListener("submit",async e=>{
 
-products.push({name,cat,type,price,file});
-render();
-this.reset();
-alert("PDF Demo में जोड़ दी गई है।");
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try{
+
+    const result = await auth.signInWithEmailAndPassword(email,password);
+
+    if(result.user.uid !== ADMIN_UID){
+      await auth.signOut();
+      alert("यह Account Admin नहीं है।");
+      return;
+    }
+
+    showMessage("Admin Login सफल।");
+
+  }catch(error){
+    alert("Login असफल: " + error.message);
+  }
 });
 
-render();
+// Login स्थिति
+auth.onAuthStateChanged(user=>{
+
+  isAdmin = !!user && user.uid===ADMIN_UID;
+
+  document.getElementById("loginBox").classList.toggle("hidden",isAdmin);
+  document.getElementById("adminPanel").classList.toggle("hidden",!isAdmin);
+
+  render();
+
+});
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click",async()=>{
+  await auth.signOut();
+  showMessage("Logout सफल।");
+});
+
+// Admin PDF Upload
+document.getElementById("uploadForm").addEventListener("submit",async e=>{
+
+  e.preventDefault();
+
+  if(!isAdmin || !auth.currentUser || auth.currentUser.uid!==ADMIN_UID){
+    alert("केवल Admin PDF Upload कर सकता है।");
+    return;
+  }
+
+  const name = document.getElementById("pname").value.trim();
+  const cat = document.getElementById("pcat").value;
+  const type = document.getElementById("ptype").value;
+  const price = Number(document.getElementById("pprice").value);
+  const file = document.getElementById("pfile").files[0];
+
+  if(!file || file.type!=="application/pdf"){
+    alert("कृपया सही PDF फाइल चुनें।");
+    return;
+  }
+
+  if(file.size >= 20*1024*1024){
+    alert("PDF का आकार 20 MB से कम होना चाहिए।");
+    return;
+  }
+
+  if(type==="PAID" && price<=0){
+    alert("Paid PDF की सही कीमत डालें।");
+    return;
+  }
+
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const storagePath = type.toLowerCase()+"/"+Date.now()+"_"+safeName;
+
+  const uploadBtn = document.getElementById("uploadBtn");
+  uploadBtn.disabled = true;
+
+  try{
+
+    await storage.ref(storagePath).put(file,{
+      contentType:"application/pdf"
+    });
+
+    await db.collection("pdfs").add({
+      name:name,
+      cat:cat,
+      type:type,
+      price:type==="FREE"?0:price,
+      storagePath:storagePath,
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    showMessage("PDF सफलतापूर्वक Upload हो गई।");
+    document.getElementById("uploadForm").reset();
+
+  }catch(error){
+
+    showMessage("Upload असफल: "+error.message);
+    console.error(error);
+
+  }finally{
+    uploadBtn.disabled = false;
+  }
+
+});
+
 </script>
 </body>
 </html>
